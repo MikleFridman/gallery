@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<h2>{{ 'Welcome to MyGallery' }}!</h2>
+<a class="btn btn-default" href="{{url_for('gallery.artwork_create')}}" role="button" style="margin-top:10px">Add new</a>
+<div class="row" style="margin-top:30px">
+    {% for item in items %}
+    <div class="col-xs-6 col-md-3">
+        <div class="panel panel-default" style="min-height: 400px;">
+            <a href="{{ url_for('gallery.artwork_view', id=item.id) }}">
+                <div class="panel-heading">{{ item.name }}</div>
+            </a>
+            <div class="panel-body">
+                <a href="{{ url_for('gallery.artwork_view', id=item.id) }}" class="thumbnail">
+                    {% if item.main_image %}
+                        <img src="{{ item.main_image.get_aws_public_url(thumbnail=True) }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='no_image.jpg') }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

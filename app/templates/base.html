@@ -1,0 +1,56 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    {% if title %}{{ title }} - MyGallery{% else %}{{ 'Welcome to MyGallery' }}{% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% block navbar %}
+<div class="container-fluid" style="margin-top:5px">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="{{ url_for('gallery.index') }}">Artworks</a></li>
+                <li class=""><a href="{{ url_for('gallery.artwork_types') }}">Artwork types</a></li>
+                <li class=""><a href="{{ url_for('gallery.features') }}">Features</a></li>
+                <li class=""><a href="{{ url_for('gallery.statuses') }}">Statuses</a></li>
+                <li class=""><a href="{{ url_for('gallery.clients') }}">Clients</a></li>
+                <li class=""><a href="{{ url_for('gallery.tags') }}">Tags</a></li>
+                <li class=""><a href="{{ url_for('gallery.offers') }}">Offers</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script>
+        function hide_message() {
+            $('#messages').fadeOut(6000);
+        }
+    </script>
+    <div id="messages" class="container mt-3">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-warning" role="alert" id="message">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <script type="text/javascript">
+           hide_message();
+        </script>
+    </div>
+    <div class="container mt-3">
+        {% if modal %}
+            {% include '_confirm_form.html' %}
+        {% endif %}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ item.name }}</div>
+        <div class="panel-body">
+            <div class="thumbnail">
+                {% if item.is_video%}
+                    <video id="player" width="100%" height="auto" controls>
+                        <source src="{{ item.get_aws_public_url() }}" type="video/mp4">
+                    </video>
+                {% else %}
+                    <img src="{{ item.get_aws_public_url() }}">
+                {% endif%}
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a class="btn btn-default" href="{{url_for('gallery.attachment_edit', id=item.id)}}" role="button">Edit</a>
+            <a class="btn btn-default" href="{{url_for('gallery.artwork_view', id=item.artwork.id)}}" role="button">Back</a>
+            <a class="btn btn-default" href="{{url_for('gallery.attachment_delete', id=item.id)}}" role="button" style="margin-left:25px">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

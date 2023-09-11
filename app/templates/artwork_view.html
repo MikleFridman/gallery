@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ item.name }}</div>
+        <div class="panel-body">
+            <div class="thumbnail">
+                {% if item.main_image %}
+                    <img src="{{ item.main_image.get_aws_public_url(thumbnail=False) }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='no_image.jpg') }}">
+                {% endif %}
+            </div>
+            <div class="row">
+
+            {% for file in item.files %}
+                <div class="col-xs-3">
+                    <div class="thumbnail">
+                        <a href="{{ url_for('gallery.attachment_view', id=file.id) }}">
+                            {% if file.is_video%}
+                                <img src="{{ url_for('static', filename='video.png') }}">
+                            {% else %}
+                                <img src="{{ file.get_aws_public_url(thumbnail=True) }}">
+                            {% endif%}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+            </div>
+            <div style="margin-top:3px"><strong>Author:</strong> {{ item.author }}</div>
+            <div style="margin-top:3px"><strong>Year:</strong> {{ item.year }}</div>
+            <div style="margin-top:3px"><strong>Buy price:</strong> {{ item.buy_price }} $</div>
+            <div style="margin-top:3px"><strong>Description:</strong> {{ item.info }}</div>
+            <div style="margin-top:5px">
+                <strong>Features</strong>:
+                <ul>
+                {% for feature in features %}
+                    <li style="margin-top:3px">
+                    <a href="{{ url_for('gallery.features_value', feature_id=feature.id, artwork_id=item.id) }}">
+                        <strong>{{ feature.name }}</strong></a>:  {{ values[feature.id]}}
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a class="btn btn-default" href="{{url_for('gallery.artwork_edit', id=item.id)}}" role="button">Edit</a>
+            <a class="btn btn-default" href="{{url_for('gallery.file_upload', artwork_id=item.id)}}" role="button">Upload</a>
+            <a class="btn btn-default" href="{{url_for('gallery.create_pdf', artwork_id=item.id)}}" role="button" target="_blank">Create PDF</a>
+            <a class="btn btn-default" href="{{url_for('gallery.index')}}" role="button">Back</a>
+            <a class="btn btn-default" href="{{url_for('gallery.artwork_delete', id=item.id)}}" role="button" style="margin-left:25px">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
